@@ -21,9 +21,9 @@ The order of heap depends of priority parameters.
 Min and Max class exists for interpret priority and compare items numerically.
 But you are free to implement you're own Class if you want different ordering algorithm.
 
-## :warnging: Warning
-> The default iteration process do not enqueue the Heap as common usage.
-> You must use Generator methods `top` or `pop` for iteration with remove item from heap.
+## :warning: Warning
+The default iteration process do not enqueue the Heap as common usage.
+You must use Generator methods `top` or `pop` for iteration with remove item from heap.
 
 ## Installation
 
@@ -53,17 +53,95 @@ guide](https://hoa-project.net/Literature/Contributor/Guide.html).
 
 ## Quick usage
 
-As a quick overview, we propose to see a very simple example for triggering
-error handler in specific order.
-Let's say we have an API, and we have a global Event handler to catch all exception 
-and convert them in API json error.
-But if an Resource want also register an Exception callback, we want him run in first.
+As a quick overview, we propose to see a simple use case with
+ a `Phone number`, This phone number must be sent to three methods 
+ in a strict order, `Check`, 'Transform', 'Format'.
+ Let's assume we don't have access to iteration process.
+ But we can sort in which orders our methods must be called for respect our process. 
 
 ### Register Callback
 
-In first, we want create the Heap and insert our callback.
+In first, we will create our callbacks process.
 
 ```php
+require_once dirname(dirname(__DIR__)) . '/vendor/autoload.php';
+
+// First method used to check if phone number is correct.
+$check = function($phone) {
+    if (1 !== preg_match('/^\+?[0-9]+$/', $phone)) {
+        throw new \Exception('Phone number not conform.');
+    }
+
+    return $phone;
+};
+
+// Second method used to convert number into object.
+$transform = function($phone) {
+    return (object)[
+        'prefix'  => '+33',
+        'country' => 'France',
+        'number'  => $phone,
+    ];
+};
+
+// Third method used to display formatted number.
+$format = function(\StdClass $phone) {
+    return $phone->prefix
+        . ' '
+        . wordwrap($phone->number, 3, ' ', true)
+    ;
+};
+```
+
+### Create and fill Heap
+
+Creation of our Heap with minimum priority Ascending ( lower called first ).
+
+```php
+$heap = new \Hoa\Heap\Min();
+
+// Insert the callback method with the priority argument used for order Heap.
+$heap->insert($transform, 20);
+$heap->insert($check, 10);
+$heap->insert($format, 30);
+
+
+// Show the number of item in Heap.
+var_dump(
+    $heap->count()
+);
+
+/**
+ * Will output:
+ *     int(3)
+ */
+```
+
+### Iteration Heap
+
+Then we can iterate on our `Heap` with assurance of correct call order.
+Spread your number into closure and have process mutation expected.
+
+```php
+// Phone number as expected by first callback.
+$number = '123001234';
+
+foreach ($heap as $closure) {
+    try {
+        // Mutation of number by closure, execute in the priority order expected.
+        $number = $closure($number);
+    } catch (\Exception $e) {
+        break;
+    }
+}
+
+// Finally, we can display our formatted number.
+var_dump($number);
+
+/**
+ * Will output:
+ *     string(15) "+33 123 001 234"
+ */
 
 ```
 
