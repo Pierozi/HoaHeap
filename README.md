@@ -17,13 +17,14 @@ Moreover, Hoa aims at being a bridge between industrial and research worlds.
 
 This library provides a set of advanced Heap can support Scalar, Array, Object or Closure
 as item and not only Integer, as ordinal does.
-The order of heap depends of priority parameters.
-Min and Max class exists for interpret priority and compare items numerically.
-But you are free to implement you're own Class if you want different ordering algorithm.
+The order of heap depends of priority parameter.
+
+`Hoa\Heap\Min` and `Hoa\Heap\Max` class interpret priority by comparing items numerically.
+But you are free to implement your own class if you want a different sort algorithm.
 
 ## :warning: Warning
 The default iteration process do not enqueue the Heap as common usage.
-You must use Generator methods `top` or `pop` for iteration with remove item from heap.
+You must use Generator methods `pop` or `pop` for iterate on with remove item from heap.
 
 ## Installation
 
@@ -55,7 +56,8 @@ guide](https://hoa-project.net/Literature/Contributor/Guide.html).
 
 As a quick overview, we propose to see a simple use case with
  a `Phone number`, This phone number must be sent to three methods 
- in a strict order, `Check`, 'Transform', 'Format'.
+ in a strict order, `Check`, `Transform`, `Format`.
+ 
  Let's assume we don't have access to iteration process.
  But we can sort in which orders our methods must be called for respect our process. 
 
