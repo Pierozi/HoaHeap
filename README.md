@@ -15,7 +15,7 @@ Moreover, Hoa aims at being a bridge between industrial and research worlds.
 [![Documentation](https://img.shields.io/badge/documentation-hack_book-ff0066.svg)](https://hoa-project.net/Literature/Hack/heap.html)
 [![Board](https://img.shields.io/badge/organisation-board-ff0066.svg)](https://waffle.io/hoaproject/heap)
 
-This library provides a set of advanced Heap can support Scalar, Array, Object or Closure
+This library provides a set of advanced Heap can support *Scalar*, *Array*, *Object* or *Closure*
 as item and not only Integer, as ordinal does.
 The order of heap depends of priority parameter.
 
@@ -23,8 +23,8 @@ The order of heap depends of priority parameter.
 But you are free to implement your own class if you want a different sort algorithm.
 
 ## :warning: Warning
-The default iteration process do not enqueue the Heap as common usage.
-You must use Generator methods `pop` or `pop` for iterate on with remove item from heap.
+The default iteration process do not dequeue the Heap as common usage.
+You must use Generator methods `top` or `pop` for iterate on with remove item from heap.
 
 ## Installation
 
